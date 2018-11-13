@@ -94,7 +94,7 @@ do
         NEW_REPLICAS=$(( ${NEW_REPLICAS} > ${KUBE_MIN_REPLICAS} ? ${NEW_REPLICAS} : ${KUBE_MIN_REPLICAS} ))
         printf '%s\n' "$(date -u -I'seconds') Scaling down from ${KUBE_CURRENT_REPLICAS} to ${NEW_REPLICAS}"
 
-        PAYLOAD=$(echo ${KUBE_CURRENT_OUTPUT} | jq '. * {"spec": {"replicas": '"${NEW_REPLICAS}"'}')
+        PAYLOAD=$(echo ${KUBE_CURRENT_OUTPUT} | jq '. * {"spec": {"replicas": '"${NEW_REPLICAS}"'}}')
         SCALE_OUTPUT=$(curl -sS --cacert "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt" -H "Authorization: Bearer ${KUBE_TOKEN}" -X PUT -H 'Content-Type: application/json' --data "${PAYLOAD}" "${KUBE_URL}")
 
         #PAYLOAD='[{"op":"replace","path":"/spec/replicas","value":'"${NEW_REPLICAS}"'}]'
@@ -118,7 +118,7 @@ do
         NEW_REPLICAS=$(( ${NEW_REPLICAS} < ${KUBE_MAX_REPLICAS} ? ${NEW_REPLICAS} : ${KUBE_MAX_REPLICAS} ))
         printf '%s\n' "$(date -u -I'seconds') Scaling up from ${KUBE_CURRENT_REPLICAS} to ${NEW_REPLICAS}"
 
-        PAYLOAD=$(echo ${KUBE_CURRENT_OUTPUT} | jq '. * {"spec": {"replicas": '"${NEW_REPLICAS}"'}')
+        PAYLOAD=$(echo ${KUBE_CURRENT_OUTPUT} | jq '. * {"spec": {"replicas": '"${NEW_REPLICAS}"'}}')
         SCALE_OUTPUT=$(curl -sS --cacert "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt" -H "Authorization: Bearer ${KUBE_TOKEN}" -X PUT -H 'Content-Type: application/json' --data "${PAYLOAD}" "${KUBE_URL}")
 
         #PAYLOAD='[{"op":"replace","path":"/spec/replicas","value":'"${NEW_REPLICAS}"'}]'
