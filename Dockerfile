@@ -1,17 +1,17 @@
-FROM alpine:3.8
+FROM python:3.7.0
 
-LABEL maintainer="Chris Duncan <github.com/veqryn>"
+LABEL maintainer="Michael Wright <mkwright@gmail.com>"
 
 # Install software requirements
-RUN set -eux; \
-  apk update; \
-  apk upgrade; \
-  apk add --update --no-cache tzdata ca-certificates curl jq bash less; \
-  apk add --update --no-cache --repository https://dl-3.alpinelinux.org/alpine/edge/testing aws-cli; \
-  rm -rf /var/cache/apk/* /tmp/* /var/tmp/*
+RUN apt-get update && \
+    apt-get install -y tzdata ca-certificates curl jq less; \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+RUN pip install awscli
 
 # Add script
 COPY ./entrypoint.sh /usr/local/bin/
 
 # Command
 CMD ["/usr/local/bin/entrypoint.sh"]
+
